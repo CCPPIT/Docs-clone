@@ -5,6 +5,7 @@ import { PaginationStatus } from 'convex/react'
 import { LoaderIcon } from 'lucide-react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import DocumentRow from './document-row'
+import { Button } from '@/components/ui/button'
 
 type Props = {
     documents:Doc<"documents">[]|undefined
@@ -28,8 +29,8 @@ const DocumentTable = ({documents,loadMore,status}: Props) => {
                     <TableRow className='hover:bg-transparent border-none'>
                         <TableHead>Name</TableHead>
                         <TableHead>&nbsp;</TableHead>
-                        <TableHead>Shared</TableHead>
-                        <TableHead>Created at</TableHead>
+                        <TableHead className='hidden md:table-cell '>Shared</TableHead>
+                        <TableHead className='hidden md:table-cell'>Created at</TableHead>
                     </TableRow>
                 </TableHeader>
                 {documents.length===0?(
@@ -53,6 +54,17 @@ const DocumentTable = ({documents,loadMore,status}: Props) => {
             </Table>
 
         )}
+        <div className='flex items-center justify-center'>
+            <Button
+            variant={"ghost"}
+            size={"sm"}
+            onClick={()=>loadMore(5)}
+            disabled={status !=="CanLoadMore"}
+            >
+             {status==="CanLoadMore"?"Load more":"End of results"}
+            </Button>
+
+        </div>
     </div>
   )
 }

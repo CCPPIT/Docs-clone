@@ -22,15 +22,31 @@ import ListItem from '@tiptap/extension-list-item'
 import BulletList from '@tiptap/extension-bullet-list'
 import {FontSizeExtension}from "@/extensions/font-size"
 import {LineHeightExtension}from "@/extensions/line-height"
+import { useLiveblocksExtension } from "@liveblocks/react-tiptap";
+import Collaboration from '@tiptap/extension-collaboration';
+import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
+
+
 
 import React from 'react'
 import { useEditorStore } from "@/store/use-editor-store"
 import { types } from "util"
 import {Ruler} from "./ruler"
+import { Doc } from "yjs"
+import * as Y from 'yjs'
+import { Threads } from "./threads"
+
+
+const doc = new Y.Doc() 
+// const ydoc = new Y.Doc()
+
 
 type Props = {}
 
 const Editor = (props: Props) => {
+  // const provider = new WebrtcProvider('tiptap-collaboration-cursor-extension', ydoc)
+
+  const liveblocks = useLiveblocksExtension();
     const {setEditor}=useEditorStore()
     const editor=useEditor({
       immediatelyRender:false,
@@ -77,8 +93,24 @@ const Editor = (props: Props) => {
 
         },
         extensions: [
-            StarterKit,
+          
+          liveblocks,
+            StarterKit.configure({
+              history:false
+              
+            }),
             FontSizeExtension,
+            // Collaboration.configure({
+            //   document:doc,
+
+            // }),
+            // CollaborationCursor.configure({
+            //   // provider,
+            //   user: {
+            //     name: 'Cyndi Lauper',
+            //     color: '#f783ac',
+            //   },
+            // }),
             LineHeightExtension.configure({
               types:["heading","paragraph"],
               defaultLineHeight:"normal"
@@ -136,6 +168,7 @@ const Editor = (props: Props) => {
       <Ruler/>
         <div className="min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0">
         <EditorContent editor={editor}/>
+        <Threads editor={editor}/>
         </div>
         
     </div>

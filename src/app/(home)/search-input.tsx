@@ -8,7 +8,7 @@ import React, { useRef, useState } from 'react'
 type Props = {}
 
 export const SearchInput = (props: Props) => {
-    const [search,setSearch]=useSearchParam("")
+    const [search,setSearch]=useSearchParam()
     const [value,setValue]=useState(search);
     const inputRef=useRef<HTMLInputElement>(null);
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{

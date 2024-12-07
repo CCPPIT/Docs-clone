@@ -695,7 +695,8 @@ const Toolbar = (props: Props) => {
             {
                 label:"Comment",
                 icon:MessageSquarePlusIcon,
-                onClick:()=>console.log("TODO: Comment")
+                onClick:()=>editor?.chain().focus().addPendingComment().run(),
+                isActive:editor?.isActive("liveblocksCommentMark")
             },
             {
                 label:"List Todo",
