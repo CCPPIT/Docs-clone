@@ -77,7 +77,7 @@ const RenameDialog = ({documentId,initialTitle,children}: Props) => {
                 </Button>
                 <Button
                 type='submit'
-                variant={"ghost"}
+               
                 disabled={isUpdating}
                 onClick={(e)=>e.stopPropagation()}
                 >

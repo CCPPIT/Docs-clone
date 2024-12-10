@@ -1,12 +1,21 @@
+import { LEFT_MARGIN_DEFAULT, RIGHT_MARGIN_DEFAULT } from '@/constants/margins'
+import { useMutation, useStorage } from '@liveblocks/react'
 import React, { useRef, useState } from 'react'
 import {FaCaretDown}from "react-icons/fa"
 
 
 const markers=Array.from({length:83},(_,i)=>i)
 export const Ruler = () => {
+    const leftMargin=useStorage((root)=>root.leftMargin)??LEFT_MARGIN_DEFAULT;
+    const setLeftMargin=useMutation(({storage},position:number)=>{
+        storage.set("leftMargin",position)
+    },[]);
+    const setRightMargin=useMutation(({storage},position:number)=>{
+        storage.set("rightMargin",position)
+
+    },[])
+    const rightMargin=useStorage((root)=>root.rightMargin)??RIGHT_MARGIN_DEFAULT;
    
-    const [leftMargin,setLefMargin]=useState(56)
-    const [rightMargin,setRightMargin]=useState(56)
     const [isDragginLeft,setIsDraggingLeft]=useState(false)
     const [isDraggingRight,setIsDraggingRight]=useState(false);
     const rulerRef=useRef<HTMLDivElement>(null);
@@ -43,7 +52,7 @@ export const Ruler = () => {
                     const newLeftPosition = Math.min(rawPosition, maxLeftPosition);
                     
                     // قم بتحديث الهامش الأيسر
-                    setLefMargin(newLeftPosition);
+                    setLeftMargin(newLeftPosition);
                 } 
                 // إذا كنا نقوم بالسحب من اليمين
                 else if (isDraggingRight) {
@@ -67,10 +76,10 @@ export const Ruler = () => {
         setIsDraggingRight(false)
     }
     const handleLeftDoubleClick=()=>{
-        setLefMargin(56)
+        setLeftMargin(LEFT_MARGIN_DEFAULT)
     }
     const handleRegithDoubleClick=()=>{
-        setRightMargin(56)
+        setRightMargin(RIGHT_MARGIN_DEFAULT)
     }
   return (
     <div 

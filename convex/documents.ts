@@ -1,6 +1,34 @@
 import { ConvexError, v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { paginationOptsValidator } from "convex/server";
+// تصدير دالة `getByIds` التي تستعمل لاسترجاع وثائق متعددة بناءً على معرفاتها
+export const getByIds = query({
+    // تعريف المعاملات المطلوبة للدالة
+    args: { ids: v.array(v.id("documents")) }, // يتطلب مصفوفة من معرفات الوثائق
+
+    // معالج الطلب
+    handler: async (ctx, { ids }) => {
+        const documents = []; // مصفوفة لتخزين الوثائق المسترجعة
+
+        // حلقة لتكرار كل معرف في مصفوفة `ids`
+        for (const id of ids) {
+            // استرجاع الوثيقة من قاعدة البيانات باستخدام المعرف
+            const document = await ctx.db.get(id);
+
+            // التحقق مما إذا كانت الوثيقة موجودة
+            if (document) {
+                // إذا كانت الوثيقة موجودة، أضفها إلى المصفوفة مع معرفها وعنوانها
+                documents.push({ id: document._id, name: document.title });
+            } else {
+                // إذا لم توجد الوثيقة، أضف عنصرًا بديلًا مع اسم "[Removed]"
+                documents.push({ id, name: "[Removed]" });
+            }
+        }
+
+        // إرجاع المصفوفة النهائية من الوثائق
+        return documents;
+    } 
+});
 export const create=mutation({
     args:{
         title:v.optional(v.string()),
@@ -40,7 +68,7 @@ export const removeById=mutation({
         }
         const isOwner=document.ownerId===user.subject;
 
-        const isOrganizationMember=document.organizationId===organizationId;
+        const isOrganizationMember=!!(document.organizationId&&document.organizationId===organizationId);
 
         if(!isOwner && !organizationId){
             throw new ConvexError("Unauthorized");
@@ -65,7 +93,7 @@ export const updateById=mutation({
         const isOwner=document.ownerId===user.subject;
         const organizationId=(user.organization_id??undefined)as
         |string|undefined;
-        const isOrganizationMember=document.organizationId===organizationId;
+        const isOrganizationMember=!!(document.organizationId&& document.organizationId===organizationId);
 
        
         if(!isOwner &&!isOrganizationMember){
@@ -106,4 +134,15 @@ export const getdocuments=query({
         return await ctx.db.query("documents").withIndex("by_owner_id",(q)=>q.eq("ownerId",user.subject)).paginate(paginationOpts);
 
     }
+})
+export const getById=query({
+    args:{id:v.id("documents")},
+    handler:async(ctx,{id})=>{
+        const document=await ctx.db.get(id)
+        if(!document){
+            throw new ConvexError("Document not found")
+        }
+        return document
+    },
+    
 })

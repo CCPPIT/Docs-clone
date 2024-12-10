@@ -1,21 +1,15 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import {Inter} from "next/font/google";
 import "./globals.css";
 import {NuqsAdapter} from "nuqs/adapters/next/app"
 import { ConvexClientProvider } from "@/components/convex-client-provider";
-import {ClerkProvider} from "@clerk/nextjs"
 import { Toaster } from "sonner";
 import "@liveblocks/react-ui/styles.css";
 import "@liveblocks/react-tiptap/styles.css";
 
 
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
+
 const inter =Inter({
 subsets:["latin"],
 

@@ -23,30 +23,33 @@ import BulletList from '@tiptap/extension-bullet-list'
 import {FontSizeExtension}from "@/extensions/font-size"
 import {LineHeightExtension}from "@/extensions/line-height"
 import { useLiveblocksExtension } from "@liveblocks/react-tiptap";
-import Collaboration from '@tiptap/extension-collaboration';
-import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
+
 
 
 
 import React from 'react'
 import { useEditorStore } from "@/store/use-editor-store"
-import { types } from "util"
 import {Ruler} from "./ruler"
-import { Doc } from "yjs"
-import * as Y from 'yjs'
 import { Threads } from "./threads"
+import { useStorage } from "@liveblocks/react"
+import { LEFT_MARGIN_DEFAULT, RIGHT_MARGIN_DEFAULT } from "@/constants/margins"
 
 
-const doc = new Y.Doc() 
-// const ydoc = new Y.Doc()
 
 
-type Props = {}
 
-const Editor = (props: Props) => {
-  // const provider = new WebrtcProvider('tiptap-collaboration-cursor-extension', ydoc)
+type Props = {
+  initialContent?:string | undefined
+}
 
-  const liveblocks = useLiveblocksExtension();
+const Editor = ({initialContent}: Props) => {
+  const leftMargin=useStorage((root)=>root.leftMargin)??LEFT_MARGIN_DEFAULT;
+  const rightMargin=useStorage((root)=>root.rightMargin)?? RIGHT_MARGIN_DEFAULT;
+
+  const liveblocks = useLiveblocksExtension({
+    initialContent,
+    offlineSupport_experimental:true
+  });
     const {setEditor}=useEditorStore()
     const editor=useEditor({
       immediatelyRender:false,
@@ -86,7 +89,7 @@ const Editor = (props: Props) => {
         },
         editorProps:{
             attributes:{
-                style:"padding-left:56px; padding-right:56px;",
+                style:`padding-left:${leftMargin}px; padding-right:${rightMargin}px;`,
                 class:"focus:outline-none print:border-0 bg-white border border-[#C7C7C7] flex flex-col min-h-[1054px] w-[816px] pt-10 pb-10 cursor-text pr-14"
             }
 
@@ -100,17 +103,7 @@ const Editor = (props: Props) => {
               
             }),
             FontSizeExtension,
-            // Collaboration.configure({
-            //   document:doc,
-
-            // }),
-            // CollaborationCursor.configure({
-            //   // provider,
-            //   user: {
-            //     name: 'Cyndi Lauper',
-            //     color: '#f783ac',
-            //   },
-            // }),
+         
             LineHeightExtension.configure({
               types:["heading","paragraph"],
               defaultLineHeight:"normal"
@@ -146,22 +139,7 @@ const Editor = (props: Props) => {
             }),
             TaskList
         ],
-      //   content: `
-      //   <table>
-      //     <tbody>
-      //       <tr>
-      //         <th>Name</th>
-      //         <th colspan="3">Description</th>
-      //       </tr>
-      //       <tr>
-      //         <td>Cyndi Lauper</td>
-      //         <td>Singer</td>
-      //         <td>Songwriter</td>
-      //         <td>Actress</td>
-      //       </tr>
-      //     </tbody>
-      //   </table>
-      // `,
+     
     })
   return (
     <div className="size-full overflow-x-auto bg-[#F9FBFD] px-4 print:p-0 print:bg-white print:overflow-visible">
