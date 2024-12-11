@@ -8,9 +8,9 @@ import { BellIcon } from 'lucide-react'
 import React from 'react'
 import { Separator } from '@/components/ui/separator'
 
-type Props = {}
 
-export const Inbox = (props: Props) => {
+
+export const Inbox = () => {
   return (
    <ClientSideSuspense fallback={
     <Button

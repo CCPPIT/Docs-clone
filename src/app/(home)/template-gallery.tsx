@@ -8,10 +8,10 @@ import React, { useState } from 'react'
 import { api } from '../../../convex/_generated/api';
 import { toast } from 'sonner';
 
-type Props = {}
 
 
-const TemplateGallery = (props: Props) => {
+
+const TemplateGallery = () => {
     const router=useRouter();
     const create=useMutation(api.documents.create);
     const [isCreating,setIsCreating]=useState(false);

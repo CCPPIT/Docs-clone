@@ -629,9 +629,9 @@ const ToolbarButton=({
 
 }
 
-type Props = {}
 
-const Toolbar = (props: Props) => {
+
+const Toolbar = () => {
     const {editor}=useEditorStore()
     
     console.log("Toolbar",{editor})

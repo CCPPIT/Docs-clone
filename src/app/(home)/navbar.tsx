@@ -5,9 +5,9 @@ import React from 'react'
 import { SearchInput } from './search-input'
 import { OrganizationSwitcher, UserButton } from '@clerk/nextjs'
 
-type Props = {}
 
-export const NavBar = (props: Props) => {
+
+export const NavBar = () => {
   return (
     <nav className='flex items-center justify-between h-full w-full'>
         <div className='flex gap-3 items-center shrink-0 pr-6'>
