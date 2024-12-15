@@ -22,10 +22,10 @@ export const FontSizeExtension=Extension.create({
                 attributes:{
                     fontSize:{
                         default:null,
-                        parseHTML(element) {
-                            element.style.fontSize
+                        parseHTML:element=> {
+                          return  element.style.fontSize
                         },
-                        renderHTML(attributes) {
+                        renderHTML:attributes=> {
                             if(!attributes.fontSize){
                                 return{}
                             }

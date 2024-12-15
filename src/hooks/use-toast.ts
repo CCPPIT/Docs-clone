@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+/*eslint-disable-next-line @typescript-eslint/no-unused-expressions*/
 
 "use client"
 
@@ -161,7 +161,7 @@ function toast({ ...props }: Toast) {
       ...props,
       id,
       open: true,
-      onOpenChange: (open) => {
+      onOpenChange: function (open: any) {
         if (!open) dismiss()
       },
     },
